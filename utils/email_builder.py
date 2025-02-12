@@ -10,13 +10,13 @@ SMTP_SERVER = "smtp.gmail.com"  # Google SMTP server
 PWD = config.EMAIL_PWD  # Password for email account
 
 def sendEmail(email_from, email_to, subject, body):
-    msg = MIMEMultipart()  # Create a multipart message
+    msg = MIMEMultipart("alternative")  # Create a multipart message
     msg["From"] = email_from  # Add sender email to message
     msg["To"] = email_to  # Add receiver email to message
     msg["Subject"] = subject  # Add subject to message
 
     # Add body to email
-    msg.attach(MIMEText(body, "plain"))
+    msg.attach(MIMEText(body, "html"))
 
     text = msg.as_string()
 
@@ -39,3 +39,185 @@ def sendEmail(email_from, email_to, subject, body):
     finally:
         TIE_server.quit()
         print("Connection closed...")
+        
+
+def build_email_body(weather_data, astronomy_data, stock_data):
+    styles = """
+        body {
+        background-color: #f4f4f4;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        }
+
+        .email-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 95%;
+            max-width: 800px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* index-row flexibles Layout */
+        .index-row {
+            display: flex;
+            margin-bottom: 20px;
+            justify-content: space-evenly;
+        }
+
+        .index-box {
+            background-color: #cfdee9;
+            border-radius: 5px;
+            margin: 5px;
+            padding: 10px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            min-width: 150px; 
+        }
+
+        .stock-info {
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            padding: 5px;
+            margin-bottom: 20px;
+            text-align: left;
+            position: relative; /* Für den Sektor oben rechts */
+        }
+        .stock-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stock-info p {
+            margin: 5px 0;
+        }
+
+        .sector {
+            background-color: #e0f7fa;
+            color: #00796b;
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .footer {
+            font-size: 12px;
+            color: #999;
+            margin-top: 20px;
+        }
+
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Balkendiagramm für Empfehlungen */
+        .recommendation-bar {
+            display: flex;
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+            height: 20px;
+        }
+
+        .recommendation-bar div {
+            text-align: center;
+            color: white;
+            font-size: 12px;
+            line-height: 20px;
+        }
+
+        .strong-buy {
+            background-color: #28a745; /* Grün */
+        }
+
+        .buy {
+            background-color: #007bff; /* Blau */
+        }
+
+        .hold {
+            background-color: #ffc107; /* Gelb */
+        }
+
+        .sell {
+            background-color: #fd7e14; /* Orange */
+        }
+
+        .strong-sell {
+            background-color: #dc3545; /* Rot */
+        }
+        """
+    
+    stock_html = ""
+
+    for stock in stock_data:
+        stock_html += f"""<p> {stock}
+        {stock_data[stock].get("closing_price", "N/A")}€  {stock_data[stock].get("changeSymbol", "N/A")} {stock_data[stock].get("changePct", "N/A")}% 
+        {stock_data[stock].get("recommondation", "N/A")}
+        </p>
+        """
+            
+    return f"""
+        <html lang="de">
+            <head>
+                <meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <title>Stock Report</title>
+                <style>
+                    {styles}
+                </style>
+            </head>
+                <body>
+            <div class="email-container">
+                <!-- Header Titel -->
+                <div class="header">Daily Report</div>
+                <!-- Weather Section -->
+                <div class="section">
+                    <h2>Weather for {weather_data["location"]}, {weather_data["country"]} </h2>
+                    <p>Temperature: {weather_data["temperature"]}°C</p>
+                    <p>Humidity: {weather_data["humidity"]}%</p>
+                    <p>Wind: {weather_data["wind_speed"]} km/h</p>
+                    <p>Condition: {weather_data["condition"]}</p>
+                    <p class="footer">Last Updated: {weather_data["last_updated"]}</p>
+                </div>
+                
+                <!-- Astronomy Section -->
+                <div class="section">
+                    <h2>Astronomy</h2>
+                    <p>Sunrise: {astronomy_data["sunrise"]}</p>
+                    <p>Sunset: {astronomy_data["sunset"]}</p>
+                </div>
+                
+                <!-- Stock Section -->
+                <div class="section">
+                    <h2>Stocks</h2>
+                    {stock_html}
+                </div>
+                
+                <!-- Footer -->
+                <div class="footer">This is an automated email</div>
+            </div>
+            </body>
+        </html>
+    """
