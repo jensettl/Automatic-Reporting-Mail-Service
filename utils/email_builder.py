@@ -172,10 +172,20 @@ def build_email_body(weather_data, astronomy_data, stock_data):
     stock_html = ""
 
     for stock in stock_data:
-        stock_html += f"""<p> {stock}
-        {stock_data[stock].get("closing_price", "N/A")}€  {stock_data[stock].get("changeSymbol", "N/A")} {stock_data[stock].get("changePct", "N/A")}% 
-        {stock_data[stock].get("recommondation", "N/A")}
-        </p>
+        stock_html += f"""
+            <div class="stock-info">
+                <div class="stock-info-header">
+                    <p><strong>{stock}</strong></p>
+                </div>
+                <p>Closing at {stock_data[stock]['closing_price']}€ <i>({stock_data[stock]['changeSymbol']}{stock_data[stock]['changePct']}%)</i></p>
+                <div class="recommendation-bar">
+                    <div class="strong-buy" style="width: {stock_data[stock]['strongBuy']}%">StrongBuy ({stock_data[stock]['strongBuy']}%)</div>
+                    <div class="buy" style="width: {stock_data[stock]['buy']}%">Buy ({stock_data[stock]['buy']}%)</div>
+                    <div class="hold" style="width: {stock_data[stock]['hold']}%">Hold ({stock_data[stock]['hold']}%)</div>
+                    <div class="sell" style="width: {stock_data[stock]['sell']}%">Sell ({stock_data[stock]['sell']}%)</div>
+                    <div class="strong-sell" style="width: {stock_data[stock]['strongSell']}%">StrongSell ({stock_data[stock]['strongSell']}%)</div>
+                </div>
+            </div>
         """
             
     return f"""
