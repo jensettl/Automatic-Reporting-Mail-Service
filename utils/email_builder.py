@@ -5,8 +5,8 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import config
 
-SMTP_PORT = 587  # Standard port for email submission
-SMTP_SERVER = "smtp.gmail.com"  # Google SMTP server
+SMTP_PORT = config.SMTP_PORT  # Standard port for email submission
+SMTP_SERVER = config.SMTP_SERVER  # Google SMTP server
 PWD = config.EMAIL_PWD  # Password for email account
 
 def sendEmail(email_from, email_to, subject, body):
