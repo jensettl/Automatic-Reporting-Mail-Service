@@ -41,7 +41,7 @@ def sendEmail(email_from, email_to, subject, body):
         print("Connection closed...")
         
 
-def build_email_body(weather_data, astronomy_data, stock_data):
+def build_email_body(weather_data, astronomy_data, stock_data, cleaned_headlines, **kwargs):
     styles = """
         body {
         background-color: #f4f4f4;
@@ -70,11 +70,10 @@ def build_email_body(weather_data, astronomy_data, stock_data):
             margin-bottom: 20px;
         }
 
-        /* index-row flexibles Layout */
         .index-row {
             display: flex;
             margin-bottom: 20px;
-            justify-content: space-evenly;
+            width: 100%;
         }
 
         .index-box {
@@ -84,7 +83,8 @@ def build_email_body(weather_data, astronomy_data, stock_data):
             padding: 10px;
             box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
             text-align: center;
-            min-width: 150px; 
+            flex: 1;
+            min-width: 150px;
         }
 
         .stock-info {
@@ -93,7 +93,7 @@ def build_email_body(weather_data, astronomy_data, stock_data):
             padding: 5px;
             margin-bottom: 20px;
             text-align: left;
-            position: relative; /* Für den Sektor oben rechts */
+            position: relative;
         }
         .stock-info-header {
             display: flex;
@@ -131,7 +131,6 @@ def build_email_body(weather_data, astronomy_data, stock_data):
             text-decoration: underline;
         }
 
-        /* Balkendiagramm für Empfehlungen */
         .recommendation-bar {
             display: flex;
             background-color: #f4f4f4;
@@ -149,28 +148,28 @@ def build_email_body(weather_data, astronomy_data, stock_data):
         }
 
         .strong-buy {
-            background-color: #28a745; /* Grün */
+            background-color: #28a745;
         }
 
         .buy {
-            background-color: #007bff; /* Blau */
+            background-color: #007bff;
         }
 
         .hold {
-            background-color: #ffc107; /* Gelb */
+            background-color: #ffc107;
         }
 
         .sell {
-            background-color: #fd7e14; /* Orange */
+            background-color: #fd7e14;
         }
 
         .strong-sell {
-            background-color: #dc3545; /* Rot */
+            background-color: #dc3545;
         }
         """
     
+    # Stocks Section
     stock_html = ""
-
     for stock in stock_data:
         stock_html += f"""
             <div class="stock-info">
@@ -185,6 +184,17 @@ def build_email_body(weather_data, astronomy_data, stock_data):
                     <div class="sell" style="width: {stock_data[stock]['sell']}%">Sell ({stock_data[stock]['sell']}%)</div>
                     <div class="strong-sell" style="width: {stock_data[stock]['strongSell']}%">StrongSell ({stock_data[stock]['strongSell']}%)</div>
                 </div>
+            </div>
+        """
+    
+    # Headlines Section
+    articles_html = ""
+    for article in cleaned_headlines:
+        articles_html += f"""
+            <div class="index-box">
+                <h3><a href="{article['url']}">{article['title']}</a></h3>
+                <p style="color:grey; font-size:12px">{article['published_at']}</p>
+                <p>{article['description']}</p>
             </div>
         """
             
@@ -224,6 +234,13 @@ def build_email_body(weather_data, astronomy_data, stock_data):
                     <h2>Stocks</h2>
                     {stock_html}
                 </div>
+                
+                <!-- Headlines Section -->
+                <div class="section">
+                    <h2>Headlines</h2>
+                    <div class="index-row">
+                        {articles_html}
+                    </div>
                 
                 <!-- Footer -->
                 <div class="footer">This is an automated email</div>
