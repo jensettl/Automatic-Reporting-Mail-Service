@@ -10,10 +10,10 @@ def get_weather_data(query: str):
     :return: dict or None, weather data if successful, otherwise None
     """
     
-    url = "http://api.weatherapi.com/v1/current.json"
+    url = config.WEATHER_URL
     params = {
-        "key": f"{config.WEATHER_API_KEY}",
-        "q": f"{query}",
+        "key": config.WEATHER_API_KEY,
+        "q": config.QUERY,
     }
     weather_data = fetch_data(url, params=params)
     
@@ -31,11 +31,11 @@ def get_astronomy_data(query: str, date: str):
     :return: dict or None, astronomy data if successful, otherwise None
     """
     
-    url = "http://api.weatherapi.com/v1/astronomy.json"
+    url = config.ASTRONOMY_URL
     params = {
-        "key": f"{config.WEATHER_API_KEY}",
-        "q": f"{query}",
-        "dt": f"{date}",
+        "key": config.WEATHER_API_KEY,
+        "q": config.QUERY,
+        "dt": config.TODAY,
     }
     astronomy_data = fetch_data(url, params=params)
     
