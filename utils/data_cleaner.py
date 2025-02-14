@@ -57,6 +57,33 @@ def clean_stock_data(stock_data):
     
     return cleaned_data
 
+def clean_headlines_data(headlines_data):
+    """
+    Clean and structure headlines data from the API response.
+    
+    :param headlines_data: dict, raw headlines data from the news API
+    :return: list, cleaned headlines data with relevant information
+    """
+    
+    if not headlines_data:
+        print("No articles found in the headlines data.")
+        return None
+    
+    cleaned_data = []
+    for article in headlines_data:
+        cleaned_article = {
+            "source": article["source"].get("name", "No source available"),
+            "author": article["author"],
+            "title": article["title"],
+            "description": article["description"],
+            "url": article["url"],
+            "published_at": parse_timestamp(article["publishedAt"])
+        }
+        cleaned_data.append(cleaned_article)
+    
+    return cleaned_data
+    
+
 def parse_timestamp(timestamp_str):
     """
     Convert a timestamp string into a readable datetime format.
