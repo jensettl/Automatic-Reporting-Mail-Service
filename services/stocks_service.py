@@ -24,11 +24,22 @@ def calculateBarChartLength(
 
 def get_stock_info(ticker_list):
     data = {}
-    CURRENT_EXCHANGE_RATE = yf.Ticker("USDEUR=X").history(period="1d")["Close"].iloc[-1].round(2)
+    
+    try:
+        CURRENT_EXCHANGE_RATE = yf.Ticker("USDEUR=X").history(period="1d")["Close"].iloc[-1].round(2)
+    except(Exception):
+        CURRENT_EXCHANGE_RATE = 1
     
     for ticker in ticker_list:
         
-        stock = yf.Ticker(ticker)
+        try:
+            stock = yf.Ticker(ticker)
+        except(yf.exceptions.YFinanceError):
+            print(f"Could not fetch data for {ticker}")
+            continue
+        except(Exception):
+            print(f"An error occured while fetching data for {ticker}")
+            continue
         
         hist = stock.history(period="5d")
         
