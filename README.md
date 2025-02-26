@@ -1,11 +1,8 @@
 # Automatic Reporting Mail Service
 
-
 ## Project Overview
 
 The `Automatic Reporting Mail Service` fetches weather, astronomy, and stock data from various `APIs`, processes the data, and sends a formatted email report to a specified email address. The service is designed to run automatically at a specified time each day on a `Raspberry Pi`.
-
-
 
 ## Dependencies
 
@@ -39,3 +36,41 @@ HEADLINES_API_KEY = ""  # API key for News API
 HEADLINES_COUNTRY = "us"                                # Country code to fetch headlines for
 HEADLINES_CATEGORY = "general"                          # News category to fetch headlines for 
 ```
+
+## Installation
+
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/yourusername/Automatic-Reporting-Mail-Service.git
+    cd Automatic-Reporting-Mail-Service
+    ```
+
+2. Install the required dependencies:
+    ```sh
+    pip install -r requirements.txt
+    ```
+
+## Usage
+
+Run the script:
+```sh
+python main.py
+```
+
+or schedule the script to run automatically at a specified time each day using `cron`
+
+
+## Email Body Examples
+
+### Weather Report
+![Weather Report](images/weather_report.png)
+
+### Stocks Report
+![Stocks Report](images/stocks_report.png)
+
+### Headlines Report
+![Headlines Report](images/headlines_report.png)
+
+## License
+
+This project is licensed under the MIT License.
