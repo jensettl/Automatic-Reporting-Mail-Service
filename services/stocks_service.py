@@ -86,6 +86,3 @@ def get_stock_info(ticker_list):
         }
         
     return data
-
-if __name__ == "__main__":
-    print(get_stock_info(["AAPL", "MSFT", "GOOGL", "AMZN", "TSLA"]))
