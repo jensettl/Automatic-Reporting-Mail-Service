@@ -71,6 +71,3 @@ or schedule the script to run automatically at a specified time each day using `
 ### Headlines Report
 ![Headlines Report](images/headlines_report.png)
 
-## License
-
-This project is licensed under the MIT License.
