@@ -219,14 +219,9 @@ def build_email_body(weather_data, astronomy_data, stock_data, cleaned_headlines
                     <p>Humidity: {weather_data["humidity"]}%</p>
                     <p>Wind: {weather_data["wind_speed"]} km/h</p>
                     <p>Condition: {weather_data["condition"]}</p>
-                    <p class="footer">Last Updated: {weather_data["last_updated"]}</p>
-                </div>
-                
-                <!-- Astronomy Section -->
-                <div class="section">
-                    <h2>Astronomy</h2>
                     <p>Sunrise: {astronomy_data["sunrise"]}</p>
                     <p>Sunset: {astronomy_data["sunset"]}</p>
+                    <p class="footer">Last Updated: {weather_data["last_updated"]}</p>
                 </div>
                 
                 <!-- Stock Section -->
